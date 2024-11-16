@@ -65,18 +65,23 @@ public class Services {
         List<CourseEntity> courseEntities = courseRepo.findAll();
         return toViewCourseDtos(courseEntities);
     }
-    public boolean enrollCourse(String courseId){
+    public int enrollCourse(String courseId){
         courseRepo.findById(courseId).orElseThrow(
                 ()->new ResourceNotFoundException("Course not found")
         );
+
         String traineeId = authService.getLoggedInUserDtls().getId();
+        List<String> enrolledCourses = traineeCourseRepo.fetchEnrolledCourses(traineeId);
+        if (enrolledCourses.contains(courseId)){
+            return 409;
+        }
         TraineeCourse traineeCourse = new TraineeCourse();
         traineeCourse.setCourseId(courseId);
         traineeCourse.setTraineeId(traineeId);
         traineeCourse.setEnrollmentDate(Instant.now().getEpochSecond());
         traineeCourseRepo.save(traineeCourse);
 
-        return true;
+        return 200;
     }
     public List<ViewCourseDto> viewEnrolledCourses(){
         String traineeId = authService.getLoggedInUserDtls().getId();

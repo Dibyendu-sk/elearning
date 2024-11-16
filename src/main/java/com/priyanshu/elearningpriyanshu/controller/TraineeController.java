@@ -24,12 +24,14 @@ public class TraineeController {
     @PostMapping("/enroll-course")
     @Operation(summary = "Enroll course", security = @SecurityRequirement(name = "basicAuth"))
     public ResponseEntity<Response<String>> enrollCourse(@RequestParam String courseId){
-        boolean isEnrolled = services.enrollCourse(courseId);
-        if (isEnrolled){
-            return ResponseEntity.ok(new Response<>(HttpStatus.CREATED.value(), "Course Enrolled"));
-        }
-        else {
-            return ResponseEntity.ok(new Response<>(HttpStatus.EXPECTATION_FAILED.value(), "error while enrolling course"));
+//        boolean isEnrolled = ;
+        int status = services.enrollCourse(courseId);
+        if (status==200){
+            return ResponseEntity.ok(new Response<>(HttpStatus.OK.value(), "Course Enrolled."));
+        } else if (status==409) {
+            return ResponseEntity.ok(new Response<>(HttpStatus.CONFLICT.value(), "You have already enrolled this course."));
+        } else {
+            return ResponseEntity.ok(new Response<>(HttpStatus.EXPECTATION_FAILED.value(), "error while enrolling course."));
         }
     }
     @GetMapping("/view-enrolled-courses")

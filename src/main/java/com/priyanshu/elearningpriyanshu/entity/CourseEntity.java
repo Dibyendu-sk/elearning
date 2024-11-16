@@ -13,6 +13,7 @@ public class CourseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String courseHeading;
+    @Column(length = 500)
     private String courseDescription;
     private long createdOn;
     @ManyToOne
