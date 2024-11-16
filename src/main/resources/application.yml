@@ -1,0 +1,14 @@
+
+spring:
+  datasource:
+    #    url: jdbc:mysql://localhost:3306/registration
+    url: jdbc:mysql://localhost:3307/elearning
+    username: root
+    password: 1234
+    #    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+server:
+  port: 9090
