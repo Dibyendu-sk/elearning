@@ -36,7 +36,7 @@ public class TrainerController {
     @GetMapping ("/view-individual-courses")
     @Operation(summary = "View courses", security = @SecurityRequirement(name = "basicAuth"))
     public ResponseEntity<Response<List<ViewCourseDto>>> viewCourses(){
-        List<ViewCourseDto> courseDtoList = services.viewCourses();
+        List<ViewCourseDto> courseDtoList = services.viewAddedCourses();
         return ResponseEntity.ok(new Response<>(HttpStatus.OK.value(), courseDtoList));
     }
 }

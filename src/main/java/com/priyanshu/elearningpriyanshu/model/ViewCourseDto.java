@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter@Setter
 public class ViewCourseDto {
+    private String courseId;
     private String courseHeading;
     private String courseDescription;
     private String courseInstructor;
