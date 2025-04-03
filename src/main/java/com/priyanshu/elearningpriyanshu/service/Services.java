@@ -55,13 +55,13 @@ public class Services {
 
     public Boolean signUp(UserEntity userEntity) {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        emailService.sendEmail(userEntity,null,"SIGN-UP");
+        emailService.sendEmail(userEntity, "SIGN-UP", null);
         userRepo.save(userEntity);
         return true;
     }
 
-    public void conatactUs(ContactRequest contactRequest){
-        emailService.sendEmail(null, contactRequest.getBody(), "CONTACT-US");
+    public void conatactUs(ContactRequest contactRequest) {
+        emailService.sendEmail(null, "CONTACT-US", contactRequest);
     }
 
     public LoggedinUserDtls login() {
@@ -80,7 +80,7 @@ public class Services {
         courseEntity.setCreatedOn(Instant.now().getEpochSecond());
         CourseEntity save = courseRepo.save(courseEntity);
 
-        if (save.getId()!=null) {
+        if (save.getId() != null) {
             VideoEntity videoEntity = storeFile(file);
             videoEntity.setCourseEntity(courseEntity);
 
@@ -167,7 +167,7 @@ public class Services {
             // Save file
             Path filePath = uploadPath.resolve(uniqueFilename);
 //            file.transferTo(filePath.toFile());
-            Files.copy(file.getInputStream(),filePath);
+            Files.copy(file.getInputStream(), filePath);
             String absoluteFilePath = filePath.toAbsolutePath().toString();
 
             VideoEntity videoEntity = new VideoEntity();
@@ -182,10 +182,12 @@ public class Services {
             throw new RuntimeException("Failed to upload file: " + e.getMessage());
         }
     }
-    public List<VideoEntity> fetchVideoByCourseId(String courseId){
+
+    public List<VideoEntity> fetchVideoByCourseId(String courseId) {
         return videoRepo.fetchVideosByCourseId(courseId);
     }
-    public VideoEntity fetchVideoById(String id){
+
+    public VideoEntity fetchVideoById(String id) {
         log.info(id);
         return videoRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Video not found"));
     }

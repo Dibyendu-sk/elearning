@@ -2,6 +2,7 @@ package com.priyanshu.elearningpriyanshu.service;
 
 import com.priyanshu.elearningpriyanshu.constants.MailConstants;
 import com.priyanshu.elearningpriyanshu.entity.UserEntity;
+import com.priyanshu.elearningpriyanshu.model.ContactRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,7 +22,7 @@ public class EmailService {
         this.authService = authService;
     }
     @Async
-    public void sendEmail(UserEntity userEntity,String body,String operation) {
+    public void sendEmail(UserEntity userEntity, String operation, ContactRequest contactRequest) {
         SimpleMailMessage message = new SimpleMailMessage();
         switch (operation){
             case "SIGN-UP":
@@ -31,10 +32,10 @@ public class EmailService {
                 message.setText(generateSignUpMailBody(userEntity));
                 break;
             case "CONTACT-US":
-                message.setTo(ORG_MAIL);
+                message.setTo("p85332398@gmail.com");
                 message.setFrom(authService.getLoggedInUserDtls().getEmail());
-                message.setSubject(body);
-                message.setText(generateSignUpMailBody(userEntity));
+                message.setSubject(contactRequest.getSubject());
+                message.setText(contactRequest.getBody());
                 break;
         }
 
