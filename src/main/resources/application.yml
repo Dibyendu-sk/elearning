@@ -1,10 +1,14 @@
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
   datasource:
     #    url: jdbc:mysql://localhost:3306/registration
     url: jdbc:mysql://localhost:3307/elearning
     username: root
-    password: 1234
+    password: root
     #    password: admin
   jpa:
     hibernate:
@@ -12,3 +16,6 @@ spring:
     show-sql: true
 server:
   port: 9090
+video:
+  storage:
+    location: uploads/videos

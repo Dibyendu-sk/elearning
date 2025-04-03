@@ -8,8 +8,10 @@ import com.priyanshu.elearningpriyanshu.service.Services;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,10 +24,10 @@ public class TrainerController {
         this.services = services;
     }
 
-    @PostMapping("/add-course")
+    @PostMapping(value = "/add-course",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Add course", security = @SecurityRequirement(name = "basicAuth"))
-    public ResponseEntity<Response<String>> addCourse(@RequestBody AddCourseDto addCourseDto){
-        Boolean isAdded = services.addCourse(addCourseDto);
+    public ResponseEntity<Response<String>> addCourse(@RequestParam("file") MultipartFile file,@RequestParam String courseHeading,@RequestParam String courseDescription){
+        Boolean isAdded = services.addCourse(file, courseHeading, courseDescription);
         if (isAdded){
             return ResponseEntity.ok(new Response<>(HttpStatus.CREATED.value(), "Course added"));
         }

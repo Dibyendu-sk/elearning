@@ -29,7 +29,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/user/**").hasAnyRole("TRAINER","TRAINEE")
                                 .requestMatchers("/api/trainer/**").hasRole("TRAINER")
                                 .requestMatchers("api/trainee/**").hasRole("TRAINEE")
-                                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**","/actuator/**").permitAll()
+                                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**","/actuator/**","api/trainee/stream/**").permitAll()
                                 .anyRequest().authenticated()
                 )
 //               .authenticationProvider(customAuthenticationProvider)

@@ -18,4 +18,5 @@ public class CourseEntity {
     private long createdOn;
     @ManyToOne
     private UserEntity courseInstructor;
+    private String courseTag;
 }
