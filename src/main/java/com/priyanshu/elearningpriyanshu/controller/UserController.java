@@ -1,6 +1,8 @@
 package com.priyanshu.elearningpriyanshu.controller;
 
+import com.priyanshu.elearningpriyanshu.constants.MailConstants;
 import com.priyanshu.elearningpriyanshu.entity.UserEntity;
+import com.priyanshu.elearningpriyanshu.model.ContactRequest;
 import com.priyanshu.elearningpriyanshu.model.LoggedinUserDtls;
 import com.priyanshu.elearningpriyanshu.model.Response;
 import com.priyanshu.elearningpriyanshu.service.Services;
@@ -38,5 +40,11 @@ public class UserController {
     public ResponseEntity<Response<LoggedinUserDtls>> login(){
         LoggedinUserDtls loggedinUserDtls = services.login();
         return ResponseEntity.ok(new Response<>(HttpStatus.OK.value(),loggedinUserDtls));
+    }
+    @PostMapping("/contact-us")
+    @Operation(summary = "contact us", security = @SecurityRequirement(name = "basicAuth"))
+    public ResponseEntity<Response<String>> contactUs(ContactRequest contactRequest){
+        services.conatactUs(contactRequest);
+        return ResponseEntity.ok(new Response<>(HttpStatus.OK.value(), MailConstants.CONTACT_RESPONSE));
     }
 }

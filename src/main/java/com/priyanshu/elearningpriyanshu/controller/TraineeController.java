@@ -75,44 +75,45 @@ public class TraineeController {
             Path videoPath = Paths.get(videoEntity.getFilePath());
 //            Resource videoResource = new UrlResource(videoPath.toUri());
             Resource videoResource = new FileSystemResource(videoPath);
-            long fileLength = videoPath.toFile().length();
+//            long fileLength = videoPath.toFile().length();
             String contentType = videoEntity.getContentType();
-
-
-            if (range == null) {
-                return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(videoResource);
-            }
-            long rangeStart;
-            long rangeEnd;
-            String[] ranges = range.replace("bytes ", "").split("-");
-            rangeStart=Long.parseLong(ranges[0]);
-            if (ranges.length > 1){
-                rangeEnd = Long.parseLong(ranges[1]);
-            }else {
-                rangeEnd = fileLength - 1;
-            }
-            if (rangeEnd > fileLength - 1){
-                rangeEnd = fileLength - 1;
-            }
-            InputStream inputStream;
-            try{
-                inputStream = Files.newInputStream(videoPath);
-                inputStream.skip(rangeStart);
-            }catch (IOException ex){
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-            long contentLength = rangeEnd-rangeStart+1;
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentLength(contentLength);
-        headers.add("Content-Range", "bytes " + rangeStart + "-" + rangeEnd + "/" + fileLength);
-        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        headers.add("Pragma", "no-cache");
-        headers.add("Expires", "0");
-        headers.add("X-Content-Type-Options", "nosniff");
-            return ResponseEntity
-                    .status(HttpStatus.PARTIAL_CONTENT)
-                    .headers(headers)
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .body(new InputStreamResource(inputStream));
+//
+//
+//            if (range == null) {
+//                return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(videoResource);
+//            }
+//            long rangeStart;
+//            long rangeEnd;
+//            String[] ranges = range.replace("bytes ", "").split("-");
+//            rangeStart=Long.parseLong(ranges[0]);
+//            if (ranges.length > 1){
+//                rangeEnd = Long.parseLong(ranges[1]);
+//            }else {
+//                rangeEnd = fileLength - 1;
+//            }
+//            if (rangeEnd > fileLength - 1){
+//                rangeEnd = fileLength - 1;
+//            }
+//            InputStream inputStream;
+//            try{
+//                inputStream = Files.newInputStream(videoPath);
+//                inputStream.skip(rangeStart);
+//            }catch (IOException ex){
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//            }
+//            long contentLength = rangeEnd-rangeStart+1;
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentLength(contentLength);
+//        headers.add("Content-Range", "bytes " + rangeStart + "-" + rangeEnd + "/" + fileLength);
+//        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+//        headers.add("Pragma", "no-cache");
+//        headers.add("Expires", "0");
+//        headers.add("X-Content-Type-Options", "nosniff");
+//            return ResponseEntity
+//                    .status(HttpStatus.PARTIAL_CONTENT)
+//                    .headers(headers)
+//                    .contentType(MediaType.parseMediaType(contentType))
+//                    .body(new InputStreamResource(inputStream));
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(videoResource);
     }
 }

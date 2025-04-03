@@ -1,10 +1,12 @@
 package com.priyanshu.elearningpriyanshu.service;
 
+import com.priyanshu.elearningpriyanshu.constants.MailConstants;
 import com.priyanshu.elearningpriyanshu.entity.CourseEntity;
 import com.priyanshu.elearningpriyanshu.entity.TraineeCourse;
 import com.priyanshu.elearningpriyanshu.entity.UserEntity;
 import com.priyanshu.elearningpriyanshu.entity.VideoEntity;
 import com.priyanshu.elearningpriyanshu.exceptions.ResourceNotFoundException;
+import com.priyanshu.elearningpriyanshu.model.ContactRequest;
 import com.priyanshu.elearningpriyanshu.model.LoggedinUserDtls;
 import com.priyanshu.elearningpriyanshu.model.ViewCourseDto;
 import com.priyanshu.elearningpriyanshu.repository.CourseRepo;
@@ -36,23 +38,30 @@ public class Services {
     private final PasswordEncoder passwordEncoder;
     private final TraineeCourseRepo traineeCourseRepo;
     private final VideoRepo videoRepo;
+    private final EmailService emailService;
     private final Path fileStorageLocation = Paths.get("uploads/videos");
     @Value("${video.storage.location}")
     private String FILE_PATH;
 
-    public Services(UserRepo userRepo, CourseRepo courseRepo, AuthService authService, PasswordEncoder passwordEncoder, TraineeCourseRepo traineeCourseRepo, VideoRepo videoRepo) {
+    public Services(UserRepo userRepo, CourseRepo courseRepo, AuthService authService, PasswordEncoder passwordEncoder, TraineeCourseRepo traineeCourseRepo, VideoRepo videoRepo, EmailService emailService) {
         this.userRepo = userRepo;
         this.courseRepo = courseRepo;
         this.authService = authService;
         this.passwordEncoder = passwordEncoder;
         this.traineeCourseRepo = traineeCourseRepo;
         this.videoRepo = videoRepo;
+        this.emailService = emailService;
     }
 
     public Boolean signUp(UserEntity userEntity) {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        emailService.sendEmail(userEntity,null,"SIGN-UP");
         userRepo.save(userEntity);
         return true;
+    }
+
+    public void conatactUs(ContactRequest contactRequest){
+        emailService.sendEmail(null, contactRequest.getBody(), "CONTACT-US");
     }
 
     public LoggedinUserDtls login() {
@@ -177,6 +186,7 @@ public class Services {
         return videoRepo.fetchVideosByCourseId(courseId);
     }
     public VideoEntity fetchVideoById(String id){
+        log.info(id);
         return videoRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Video not found"));
     }
 }
